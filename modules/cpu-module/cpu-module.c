@@ -114,9 +114,9 @@ static int my_proc_show(struct seq_file *m, void *v){
 	
 	sum+=user+nice+system+idle+iowait+irq+softirq+steal+guest+guest_nice;
 	
-	seq_printf(m, "{ \"usedcpu\": \"");
-	seq_put_decimal_ull(m, " ", jiffies_64_to_clock_t(((sum - idle) * 100 / sum)));
-	seq_printf(m, "\" }");
+	seq_printf(m, "{ \"usedcpu\": ");
+	seq_put_decimal_ull(m, "", jiffies_64_to_clock_t(((sum - idle) * 100 / sum)));
+	seq_printf(m, " }");
 	
 	return 0;
 }
