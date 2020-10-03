@@ -19,7 +19,7 @@ static int my_proc_show(struct seq_file *m, void *v){
 
     si_meminfo(&inf);
 
-    seq_printf(m,"{\"usedram\": \"%i\"}", (inf.freeram*100)/inf.totalram);
+    seq_printf(m,"{\"usedram\": %i}", (inf.freeram*100)/inf.totalram);
 
     return 0;
 }
