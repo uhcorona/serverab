@@ -10,7 +10,7 @@ mongo = PyMongo(app)
 @app.route('/nnotes', methods=['GET'])
 def getNnotes():
     nnotes = mongo.db.notes.count({})
-    return Response(response = "{ \"elements\": \""+dumps(nnotes)+"\" }", status=200, mimetype="application/json")
+    return Response(response = "{ \"elements\": "+dumps(nnotes)+" }", status=200, mimetype="application/json")
 
 @app.route('/notes', methods=['GET'])
 def getNotes():
