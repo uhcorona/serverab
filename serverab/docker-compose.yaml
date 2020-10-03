@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db_container
+    build: ./db
+    image: db_image
+    networks:
+      ab_net:
+        ipv4_address: 172.16.238.10
+  api:
+    container_name: api_container
+    build: ./api
+    image: api_image
+    volumes:
+      - /proc/:/elements/procs/
+    ports: 
+      - 80:4000
+    networks:
+      ab_net:
+        ipv4_address: 172.16.238.20
+
+networks:
+  ab_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
