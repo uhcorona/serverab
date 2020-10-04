@@ -3,6 +3,7 @@ FROM python:2
 COPY *.py ./
 
 RUN pip install flask
+RUN pip install flask-cors
 RUN pip install Flask-PyMongo
 
 EXPOSE 4000
