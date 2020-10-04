@@ -1,9 +1,11 @@
 from flask import Flask, request
 from flask import Response
+from flask_cors import CORS
 from flask_pymongo import PyMongo
 from bson.json_util import dumps, loads
 
 app = Flask(__name__)
+CORS(app)
 app.config["MONGO_URI"] = "mongodb://172.16.238.10:27017/notes"
 mongo = PyMongo(app)
 
