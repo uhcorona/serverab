@@ -20,37 +20,6 @@
 #include <linux/sched/cputime.h>
 #include <linux/tick.h>
 
-#ifndef arch_irq_stat_cpu
-#define arch_irq_stat_cpu(cpu) 0
-#endif
-#ifndef arch_irq_stat
-#define arch_irq_stat() 0
-#endif
-
-#ifdef arch_idle_time
-
-static u64 get_idle_time(struct kernel_cpustat *kcs, int cpu)
-{
-	u64 idle;
-
-	idle = kcs->cpustat[CPUTIME_IDLE];
-	if (cpu_online(cpu) && !nr_iowait_cpu(cpu))
-		idle += arch_idle_time(cpu);
-	return idle;
-}
-
-static u64 get_iowait_time(struct kernel_cpustat *kcs, int cpu)
-{
-	u64 iowait;
-
-	iowait = kcs->cpustat[CPUTIME_IOWAIT];
-	if (cpu_online(cpu) && nr_iowait_cpu(cpu))
-		iowait += arch_idle_time(cpu);
-	return iowait;
-}
-
-#else
-
 static u64 get_idle_time(struct kernel_cpustat *kcs, int cpu)
 {
 	u64 idle, idle_usecs = -1ULL;
@@ -83,8 +52,6 @@ static u64 get_iowait_time(struct kernel_cpustat *kcs, int cpu)
 	return iowait;
 }
 
-#endif
-
 static int my_proc_show(struct seq_file *m, void *v){
 	int i;
 	u64 user, nice, system, idle, iowait, irq, softirq, steal;
@@ -115,7 +82,7 @@ static int my_proc_show(struct seq_file *m, void *v){
 	sum+=user+nice+system+idle+iowait+irq+softirq+steal+guest+guest_nice;
 	
 	seq_printf(m, "{ \"usedcpu\": ");
-	seq_put_decimal_ull(m, "", jiffies_64_to_clock_t(((sum - idle) * 100 / sum)));
+	seq_put_decimal_ull(m, "", ((sum - idle) * 100 / sum));
 	seq_printf(m, " }");
 	
 	return 0;
